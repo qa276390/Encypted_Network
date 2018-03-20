@@ -73,7 +73,7 @@ if __name__ == "__main__":
     plt.title(title)
     plt.grid()
     plt.xlim(-0.1,256)
-    plt.ylim(0,0.03)
+    plt.xlim(0,0.03)
  #   plt.legend()
     plt.savefig(outputfile,dpi=200)
     #plt.show()
