@@ -26,7 +26,7 @@ def read_json_fun(file):
         str = temp[i]
         data.append(json.loads(str))
     return data
-
+    
 
 # In[32]:
 
@@ -45,12 +45,15 @@ def main():
     pktin=[]
     pktout=[]
     time=[]
-
+    print(len(data))
     for i in range(1,len(data)):
+        #print('i = ')
+        #print(i)
         d=json.dumps(data[i], indent=4)
         #print(d)
         #print(data[i]['time_start'])
         #num_pkts_in = data[i]['num_pkts_in']
+        
         #num_pkts_in = data[i]['num_pkts_out']
         packets = data[i]['packets']
         #print(packets)
@@ -85,13 +88,16 @@ def main():
         #    pktin.append(0)
     
     
-    print('--------------------------------------------------------')
+   # print('--------------------------------------------------------')
     #time=np.array(time)
     #print(np.shape(time))
-
-    plt.bar(time,pktout,facecolor='#ff4500',edgecolor='#ff4500',label="bytes_out")
-    plt.bar(time,pktin,facecolor='green',edgecolor='green',label="bytes_in")
-    
+    print(len(time))
+    print('plot')
+    #newdata = numpy.memmap(time, pktout)
+    plt.bar(time[1:120000],pktout[1:120000],facecolor='#ff4500',edgecolor='#ff4500',label="bytes_out")
+    print('plot out')
+    #plt.bar(time,pktin,facecolor='green',edgecolor='green',label="bytes_in")
+    print('plot in')
     plt.xlabel("Time(s)")
     plt.ylabel("Packet_Length(bytes)")
 
@@ -99,8 +105,9 @@ def main():
     plt.grid()
     #plt.ylim(-1.2,1.2)
     plt.legend()
-    plt.savefig(outputfile,dpi=200)
-    #plt.show()
+    #plt.savefig(outputfile,dpi=200)
+    plt.show()
+
 
     
 
@@ -113,11 +120,6 @@ if __name__ == "__main__":
 
 
 # In[5]:
-
-
-#data=np.array(data)
-#print(data)
-
 
 
 # In[10]:

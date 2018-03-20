@@ -19,7 +19,7 @@ do
 	tmp=$1
 	set - $(IFS="/"; echo $tmp)
 	filename=$2
-	jsonpath=i
+	jsonpath=$i
 	pngpath="$dir/png/${item}_$filename.png"
 	#echo $filename
 	#../bin/joy bidir=1 $i | gunzip > $jsonpath
