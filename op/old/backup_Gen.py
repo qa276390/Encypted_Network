@@ -59,40 +59,17 @@ def Generator():
     print('type = ',Type)
     time=[]
     num = 0
-    for i in range(1,len(data)):
+    for i in range(len(data)):
         
     #---------------------KL-------------------------#
         Basic_Info(data, i, df, Type)
         Marcov(data, i, df)
-        TLS(data, i, df)
     
     out_file = 'db.csv'
     if(os.path.isfile(out_file)):
         df.to_csv(out_file, mode = 'a',header = False)
     else:
         df.to_csv(out_file, header = col)
-
-def TLS(data, i, df):
-
-    scs_str = 'NULL'
-    server_name_str = 'NULL'
-    c_key_len = '0'
-
-    if data[i].__contains__('tls'):
-
-        tls = data[i]['tls']
-        if tls.__contains__('scs'):
-            scs_str = tls['scs']
-        if tls.__contains__('c_key_length'):
-            c_key_len = tls['c_key_length'] 
-        if tls.__contains__('c_extensions'):
-            tls_ext = tls['c_extensions']
-            if(tls_ext[0].__contains__('server_name')):
-                server_name_str = tls_ext[0]['server_name']
-
-    df.loc[i,'tls_scs'] = scs_str
-    df.loc[i,'tls_ext_server_name'] = server_name_str
-    df.loc[i,'tls_c_key_length'] = c_key_len
 
 def Basic_Info(data, i, df, Type):
 
@@ -179,16 +156,13 @@ def Marcov(data, i, df):
                 for k in range(20):
                     if total > 0:
                         matrix[j][k] = count[j][k]/total
-    else:
-        matrix = np.zeros([20,20])
-            
-            
-            
-    for j in range(20):
-        for k in range(20):
-            splt_str = 'splt_' + str(j) + '_' + str(k) 
-            df.loc[i,[splt_str]] = matrix[j][k]
-    
+            array = []
+            #array.append(title + '_' + str(num))
+            for j in range(20):
+                for k in range(20):
+             #       array.append(matrix[j][k])  
+                    splt_str = 'splt_' + str(j) + '_' + str(k) 
+                    df.loc[i,[splt_str]] = matrix[j][k]
 
 if __name__ == "__main__":
     Generator()
