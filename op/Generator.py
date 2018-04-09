@@ -39,7 +39,7 @@ def read_csv(file):
 # In[77]:
 
 
-def Markov():
+def Generator():
     #df = pd.read_excel('Markov.xlsx')
     col = ['sa','da','sp','dp','pr','tls_scs','tls_ext_server_name','tls_c_key_length','http_content_type','http_user_agent','http_accept_language','http_server','http_code','dns_domain_name','dns_ttl','dns_num_ip','dns_domain_rank']
     for i in range(20):
@@ -61,18 +61,14 @@ def Markov():
     #inputfile = 'aim_chat_3a.txt'
     print('python input:',inputfile)
     data = read_json_fun(inputfile)
-    #outputfile=sys.argv[2]   
-    #print('python output:',outputfile)
     fn=os.path.basename(inputfile)
     title=os.path.splitext(fn)[0]
-    #title=title.upper()
     print(title)
     
     pktin=[]
     pktout=[]
     time=[]
     num = 0
-    #print(len(data))
     for i in range(len(data)):
         d=json.dumps(data[i], indent=4)
         #print(d)
@@ -108,10 +104,6 @@ def Markov():
                     for k in range(20):
                         if total > 0:
                             matrix[j][k] = count[j][k]/total
-                #print(clas)
-                #print(count)
-                #print(matrix)
-                #print(num)
                 array = []
                 #array.append(title + '_' + str(num))
                 for j in range(20):
@@ -119,33 +111,17 @@ def Markov():
                  #       array.append(matrix[j][k])  
                         splt_str = 'splt_' + str(j) + '_' + str(k) 
                         df.loc[i,[splt_str]] = matrix[j][k]
-                #print(array)
-                #df.loc[len(df)] = array
-                #df.loc[i,[17:416]] = array
-                num += 1
                             
-        '''
-        packets = data[i]['packets']
-        time_start = data[i]['time_start']
-        for j in range(len(packets)):
-            if j==0 :
-                time.append(data[i]['time_start'])
-            else:
-                time.append(time[len(time)-1] + packets[j]['ipt']/1000.0)
-            if packets[j]['dir'] == '>':
-                pktout.append(packets[j]['b'])
-                pktin.append(0)
-            else:
-                pktin.append(-packets[j]['b'])
-                pktout.append(0)
-        '''
-    #print(df)
-    df.to_csv('db.csv')
-
+    
+    out_file = 'db.csv'
+    if(os.path.isfile(out_file)):
+        df.to_csv(out_file, mode = 'a',header = False)
+    else:
+        df.to_csv(out_file, header = col)
 
 # In[78]:
 
 
 if __name__ == "__main__":
-    Markov()
+    Generator()
 
