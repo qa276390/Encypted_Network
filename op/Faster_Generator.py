@@ -26,7 +26,7 @@ def read_json_fun(file):
 
 def Generator():
     #df = pd.read_excel('Markov.xlsx')
-    col = ['type','sa','da','sp','dp','pr','tls_scs','tls_ext_server_name','tls_c_key_length','http_content_type','http_user_agent','http_accept_language','http_server','http_code','dns_domain_name','dns_ttl','dns_num_ip','dns_domain_rank']
+    col = ['file_name','type','sa','da','sp','dp','pr','tls_scs','tls_ext_server_name','tls_c_key_length','http_content_type','http_user_agent','http_accept_language','http_server','http_code','dns_domain_name','dns_ttl','dns_num_ip','dns_domain_rank']
     for i in range(20):
         for j in range(20):
             splt_str = 'splt_' + str(i) + '_' + str(j) 
@@ -37,9 +37,9 @@ def Generator():
         col.append(dist_str)
     col.append('entropy')
 
-    df = pd.DataFrame(columns = col)
+   # df = pd.DataFrame(columns = col)
 
-    print(df.columns)
+    #print(df.columns)
     inputfile=sys.argv[1]
     print('python input:',inputfile)
     data = read_json_fun(inputfile)
@@ -50,8 +50,9 @@ def Generator():
     Type = Catgo(title)
     print('type = ',Type)
     NumIter = len(data)
-    for i in range(0,len(data)): 
-        Basic_Info(data, i, df, Type)
+    for i in range(0,len(data)):
+        df = pd.DataFrame(columns = col)
+        Basic_Info(data, i, df, Type, title)
         Marcov(data, i, df)
         TLS(data, i, df)
         http(data, i ,df)
@@ -61,11 +62,11 @@ def Generator():
             print('Processing:{}/{}'.format(i,NumIter))
 
     #Saving Dataframe into csv
-    out_file = 'db.csv'
-    if(os.path.isfile(out_file)):
-        df.to_csv(out_file, mode = 'a',header = False)
-    else:
-        df.to_csv(out_file, header = col)
+        out_file = 'db.csv'
+        if(os.path.isfile(out_file)):
+            df.to_csv(out_file, mode = 'a',header = False)
+        else:
+            df.to_csv(out_file, header = col)
 
 def Byte_dist(data, i, df):
     bdlist = []
@@ -194,7 +195,7 @@ def TLS(data, i, df):
     df.loc[i,'tls_ext_server_name'] = server_name_str
     df.loc[i,'tls_c_key_length'] = c_key_len
 
-def Basic_Info(data, i, df, Type):
+def Basic_Info(data, i, df, Type, file_name):
 
     if data[i].__contains__('sa'):
         df.loc[i,'sa'] = data[i]['sa']
@@ -222,6 +223,7 @@ def Basic_Info(data, i, df, Type):
         df.loc[i,'pr'] = 'NULL'
     
     df.loc[i,'type'] = Type
+    df.loc[i,'file_name'] = file_name
 
 def Catgo(t):
     t = t.lower()
